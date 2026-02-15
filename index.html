@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Space Notepad - Login</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    font-family:Arial, sans-serif;
+    background:black url("https://www.transparenttextures.com/patterns/stardust.png");
+    color:white;
+    overflow:hidden;
+}
+
+/* CENTER CARD */
+.login-wrapper{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.login-card{
+    background:rgba(0,0,0,0.85);
+    padding:40px;
+    border-radius:25px;
+    text-align:center;
+    width:350px;
+    box-shadow:0 0 40px cyan;
+}
+
+.title{
+    font-size:34px;
+    color:#00ffff;
+    text-shadow:0 0 20px cyan;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    margin-bottom:20px;
+}
+
+.input-box{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:12px;
+    border:none;
+    font-size:16px;
+}
+
+.login-btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:30px;
+    background:#00ffff;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.login-btn:hover{
+    transform:scale(1.05);
+}
+
+.music-text{
+    margin-top:10px;
+    font-size:14px;
+    color:cyan;
+}
+
+/* NAV BUTTONS */
+.nav-buttons{
+    position:fixed;
+    bottom:20px;
+    width:100%;
+    text-align:center;
+}
+
+.nav-buttons button{
+    background:transparent;
+    border:1px solid cyan;
+    color:cyan;
+    padding:8px 18px;
+    margin:5px;
+    border-radius:20px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.nav-buttons button:hover{
+    background:cyan;
+    color:black;
+}
+
+/* CUSTOM POPUP */
+.popup{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+.popup-box{
+    background:black;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 0 30px cyan;
+    width:320px;
+}
+
+.popup-box h2{
+    color:#00ffff;
+}
+
+.popup-box button{
+    margin-top:15px;
+    padding:8px 20px;
+    border:none;
+    border-radius:20px;
+    background:#00ffff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.show{
+    display:flex;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="title">🚀 Space Notepad</div>
+        <div class="subtitle">Login to Continue</div>
+
+        <form id="loginForm">
+            <input type="text" id="username" class="input-box" placeholder="Enter Your Name" required>
+            <input type="password" id="password" class="input-box" placeholder="Enter Password" required>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+
+        <div class="music-text">Click anywhere to enable space music 🎵</div>
+    </div>
+</div>
+
+<!-- ABOUT & CONTACT -->
+<div class="nav-buttons">
+    <button onclick="openPopup('aboutPopup')">About</button>
+    <button onclick="openPopup('contactPopup')">Contact Us</button>
+</div>
+
+<!-- ABOUT POPUP -->
+<div class="popup" id="aboutPopup">
+    <div class="popup-box">
+        <h2>🚀 About</h2>
+        <p>
+            Space Notepad is a smart web notepad.<br>
+            Login with same name & password<br>
+            to access your saved files anytime.
+        </p>
+        <button onclick="closePopup('aboutPopup')">Close</button>
+    </div>
+</div>
+
+<!-- CONTACT POPUP -->
+<div class="popup" id="contactPopup">
+    <div class="popup-box">
+        <h2>📧 Contact Us</h2>
+        <p>Email:<br><b>varunpattnayak2006@gmail.com</b></p>
+        <button onclick="closePopup('contactPopup')">Close</button>
+    </div>
+</div>
+
+<!-- MUSIC (ONLY LOGIN PAGE) -->
+<audio id="bgMusic" loop>
+    <source src="space.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// MUSIC ENABLE ON CLICK
+document.body.addEventListener("click", function(){
+    document.getElementById("bgMusic").play().catch(()=>{});
+}, { once:true });
+
+// LOGIN SYSTEM
+document.getElementById("loginForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const name = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+
+    if(name === "" || pass === ""){
+        return;
+    }
+
+    localStorage.setItem("space_user", name);
+    localStorage.setItem("space_pass", pass);
+
+    window.location.href = "dashboard.html";
+});
+
+// POPUP FUNCTIONS
+function openPopup(id){
+    document.getElementById(id).classList.add("show");
+}
+
+function closePopup(id){
+    document.getElementById(id).classList.remove("show");
+}
+</script>
+
+</body>
+</html>

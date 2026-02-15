@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Space Notepad - Dashboard</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:black url("https://www.transparenttextures.com/patterns/stardust.png");
+    color:white;
+}
+
+.container{
+    max-width:900px;
+    margin:50px auto;
+    background:rgba(0,0,0,0.9);
+    padding:30px;
+    border-radius:25px;
+    box-shadow:0 0 40px cyan;
+    text-align:center;
+}
+
+.title{
+    font-size:36px;
+    color:#00ffff;
+    text-shadow:0 0 20px cyan;
+}
+
+input{
+    width:80%;
+    padding:12px;
+    border-radius:15px;
+    border:none;
+    margin:15px 0;
+    font-size:16px;
+}
+
+button{
+    padding:10px 20px;
+    margin:10px;
+    border:none;
+    border-radius:25px;
+    background:#00ffff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.files{
+    margin:15px 0;
+}
+
+.file-btn{
+    padding:6px 14px;
+    margin:5px;
+    border-radius:15px;
+    border:1px solid cyan;
+    background:transparent;
+    color:cyan;
+    cursor:pointer;
+}
+
+textarea{
+    width:95%;
+    height:250px;
+    border-radius:15px;
+    padding:15px;
+    font-size:16px;
+    border:none;
+    resize:none;
+}
+
+.logout{
+    background:red;
+    color:white;
+}
+
+/* CUSTOM POPUP */
+.popup{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+
+.popup-box{
+    background:black;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 0 30px cyan;
+}
+
+.show{
+    display:flex;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="title">🪐 Space Notepad</div>
+    <h2 id="welcome"></h2>
+
+    <input type="text" id="fileName" placeholder="Enter File Name">
+
+    <div>
+        <button onclick="newFile()">📄 New File</button>
+        <button onclick="saveFile()">💾 Save File</button>
+        <button onclick="deleteFile()">🗑 Delete File</button>
+    </div>
+
+    <h3>📁 Your Files</h3>
+    <div class="files" id="fileList"></div>
+
+    <h3>Your Notes</h3>
+    <textarea id="noteArea" placeholder="Start writing your notes here..."></textarea>
+
+    <br>
+    <button class="logout" onclick="logout()">🚪 Logout</button>
+</div>
+
+<!-- CUSTOM POPUP -->
+<div class="popup" id="popup">
+    <div class="popup-box">
+        <h2 id="popupMsg">Message</h2>
+        <button onclick="closePopup()">OK</button>
+    </div>
+</div>
+
+<script>
+const user = localStorage.getItem("space_user");
+const pass = localStorage.getItem("space_pass");
+
+if(!user || !pass){
+    window.location.href="index.html";
+}
+
+document.getElementById("welcome").innerText = "Welcome, " + user + " 🚀";
+
+function getStorageKey(){
+    return "files_" + user + "_" + pass;
+}
+
+function loadFiles(){
+    const files = JSON.parse(localStorage.getItem(getStorageKey())) || {};
+    const fileList = document.getElementById("fileList");
+    fileList.innerHTML="";
+
+    for(let name in files){
+        const btn=document.createElement("button");
+        btn.className="file-btn";
+        btn.innerText=name;
+        btn.onclick=()=>openFile(name);
+        fileList.appendChild(btn);
+    }
+}
+
+function newFile(){
+    document.getElementById("noteArea").value="";
+    document.getElementById("fileName").value="";
+}
+
+function saveFile(){
+    const name=document.getElementById("fileName").value.trim();
+    const content=document.getElementById("noteArea").value;
+
+    if(name===""){
+        showPopup("Enter file name first!");
+        return;
+    }
+
+    let files=JSON.parse(localStorage.getItem(getStorageKey()))||{};
+    files[name]=content;
+    localStorage.setItem(getStorageKey(), JSON.stringify(files));
+
+    showPopup("File Saved Successfully 💾");
+    loadFiles();
+}
+
+function openFile(name){
+    let files=JSON.parse(localStorage.getItem(getStorageKey()))||{};
+    document.getElementById("fileName").value=name;
+    document.getElementById("noteArea").value=files[name];
+}
+
+function deleteFile(){
+    const name=document.getElementById("fileName").value.trim();
+    if(name===""){
+        showPopup("Enter file name to delete!");
+        return;
+    }
+
+    let files=JSON.parse(localStorage.getItem(getStorageKey()))||{};
+    delete files[name];
+    localStorage.setItem(getStorageKey(), JSON.stringify(files));
+
+    document.getElementById("noteArea").value="";
+    document.getElementById("fileName").value="";
+    showPopup("File Deleted 🗑");
+    loadFiles();
+}
+
+function logout(){
+    window.location.href="index.html";
+}
+
+function showPopup(msg){
+    document.getElementById("popupMsg").innerText=msg;
+    document.getElementById("popup").classList.add("show");
+}
+
+function closePopup(){
+    document.getElementById("popup").classList.remove("show");
+}
+
+loadFiles();
+</script>
+
+</body>
+</html>
