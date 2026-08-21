@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Varun Pattnayak | Portfolio</title>
+
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    min-height:100vh;
+    background:#000;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#00ffff;
+    text-align:center;
+    overflow-x:hidden;
+}
+canvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-2;
+}
+body:after{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:radial-gradient(circle at center,rgba(0,255,255,.07),transparent 52%);
+    z-index:-1;
+}
+
+/* HEADER */
+.logo{
+    width:80px;height:80px;
+    border:3px solid cyan;
+    border-radius:50%;
+    margin:20px auto 0;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 20px cyan,0 0 45px rgba(0,255,255,.25);
+    font-weight:bold;
+    animation:pulse 2.5s infinite alternate;
+}
+.name{
+    font-size:clamp(32px,6vw,52px);
+    margin-top:18px;
+    text-shadow:0 0 10px cyan,0 0 25px cyan;
+    letter-spacing:3px;
+}
+.tagline{
+    color:#d8ffff;
+    font-size:16px;
+    margin-top:8px;
+    letter-spacing:1px;
+}
+
+/* ORBIT */
+.circle{
+    position:relative;
+    width:min(620px,94vw);
+    height:min(620px,94vw);
+    margin:35px auto 45px;
+}
+.orbit-ring{
+    position:absolute;
+    left:50%;top:50%;
+    width:72%;height:72%;
+    transform:translate(-50%,-50%);
+    border:1px solid rgba(0,255,255,.25);
+    border-radius:50%;
+    box-shadow:0 0 25px rgba(0,255,255,.08);
+    pointer-events:none;
+}
+.orbit-ring.two{
+    width:48%;height:48%;
+    border-color:rgba(0,255,255,.12);
+}
+.core{
+    position:absolute;
+    left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    width:110px;height:110px;
+    border:2px solid cyan;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(0,0,0,.8);
+    box-shadow:0 0 25px cyan, inset 0 0 20px rgba(0,255,255,.2);
+    font-weight:bold;
+    letter-spacing:1px;
+}
+.card{
+    position:absolute;
+    width:132px;height:118px;
+    border:2px solid cyan;
+    border-radius:20px;
+    display:flex;align-items:center;justify-content:center;
+    flex-direction:column;
+    gap:6px;
+    background:rgba(0,0,0,.88);
+    box-shadow:0 0 18px cyan, inset 0 0 12px rgba(0,255,255,.08);
+    cursor:pointer;
+    font-size:15px;
+    font-weight:bold;
+    transition:.25s;
+    user-select:none;
+}
+.card .icon{font-size:27px}
+.card:hover{
+    transform:scale(1.08);
+    background:rgba(0,255,255,.10);
+    box-shadow:0 0 28px cyan,0 0 55px rgba(0,255,255,.2);
+}
+.hint{
+    color:#8deeee;
+    font-size:13px;
+    margin-top:-25px;
+    opacity:.85;
+}
+
+/* SECTIONS */
+.section{
+    display:none;
+    width:min(900px,92%);
+    margin:0 auto 60px;
+    padding:35px 24px;
+    line-height:1.7;
+    font-size:17px;
+    text-align:left;
+    animation:sectionIn .45s ease;
+}
+.section.active{display:block}
+.section h2{
+    text-align:center;
+    font-size:32px;
+    margin:0 0 25px;
+    text-shadow:0 0 15px cyan;
+}
+.section h3{
+    color:#7fffff;
+    margin-bottom:8px;
+}
+.panel{
+    border:1px solid rgba(0,255,255,.55);
+    border-radius:18px;
+    padding:22px;
+    margin:18px 0;
+    background:rgba(0,0,0,.62);
+    box-shadow:0 0 18px rgba(0,255,255,.13);
+}
+.center{text-align:center}
+.muted{color:#b9eeee}
+ul{padding-left:22px}
+li{margin:7px 0}
+
+/* SKILLS */
+.skill-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+}
+.skill-card{
+    border:1px solid rgba(0,255,255,.45);
+    border-radius:15px;
+    padding:18px;
+    background:rgba(0,255,255,.025);
+}
+.skill-card h3{margin:0 0 10px}
+.level{
+    font-size:13px;
+    color:#b9ffff;
+    margin-bottom:10px;
+}
+.bar{
+    height:7px;
+    border:1px solid cyan;
+    border-radius:10px;
+    overflow:hidden;
+}
+.bar span{
+    display:block;height:100%;
+    background:cyan;
+    box-shadow:0 0 12px cyan;
+}
+.tags{
+    display:flex;flex-wrap:wrap;gap:8px;
+}
+.tag{
+    border:1px solid rgba(0,255,255,.6);
+    border-radius:20px;
+    padding:6px 11px;
+    font-size:13px;
+}
+
+/* PROJECT */
+.project-title{font-size:25px;color:white}
+.project-meta{color:#7fffff}
+.project-actions{
+    display:flex;flex-wrap:wrap;gap:12px;
+    margin-top:20px;
+}
+.btn,.back{
+    display:inline-block;
+    padding:11px 18px;
+    border:2px solid cyan;
+    border-radius:30px;
+    box-shadow:0 0 15px rgba(0,255,255,.35);
+    cursor:pointer;
+    color:cyan;
+    background:#000;
+    text-decoration:none;
+    transition:.25s;
+}
+.btn:hover,.back:hover{
+    color:#000;background:cyan;
+    box-shadow:0 0 25px cyan;
+}
+.back-wrap{text-align:center;margin-top:28px}
+
+/* CERTIFICATES / EXPERIENCE */
+.item{
+    position:relative;
+    padding:18px 20px;
+    margin:14px 0;
+    border-left:3px solid cyan;
+    background:rgba(0,255,255,.035);
+}
+.item strong{color:white}
+
+/* CONTACT */
+.contact-links{
+    display:grid;
+    gap:12px;
+}
+.contact-link{
+    color:#8fffff;
+    text-decoration:none;
+    border:1px solid rgba(0,255,255,.35);
+    padding:13px 16px;
+    border-radius:12px;
+    transition:.2s;
+}
+.contact-link:hover{background:rgba(0,255,255,.12);box-shadow:0 0 15px rgba(0,255,255,.2)}
+
+/* SMART CHATBOT */
+.chatBtn{
+    position:fixed;
+    bottom:20px;right:20px;
+    z-index:20;
+    background:cyan;color:#000;
+    padding:12px 20px;
+    border-radius:25px;
+    cursor:pointer;
+    font-weight:bold;
+    box-shadow:0 0 20px cyan;
+    transition:.25s;
+}
+.chatBtn:hover{
+    transform:scale(1.06);
+    box-shadow:0 0 30px cyan,0 0 55px rgba(0,255,255,.25);
+}
+.chatBox{
+    position:fixed;
+    bottom:78px;right:20px;
+    z-index:20;
+    width:340px;
+    max-width:calc(100vw - 30px);
+    background:rgba(0,0,0,.97);
+    border:2px solid cyan;
+    box-shadow:0 0 25px cyan,0 0 70px rgba(0,255,255,.12);
+    border-radius:16px;
+    display:none;
+    overflow:hidden;
+    backdrop-filter:blur(8px);
+}
+.chatHeader{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:13px 15px;
+    border-bottom:1px solid rgba(0,255,255,.45);
+    background:rgba(0,255,255,.06);
+}
+.chatHeader strong{
+    display:block;
+    color:cyan;
+    letter-spacing:1px;
+}
+.chatHeader span{
+    display:block;
+    font-size:11px;
+    color:#8feeee;
+    margin-top:2px;
+}
+.chatHeader button{
+    width:28px;height:28px;
+    border:1px solid cyan;
+    border-radius:50%;
+    background:transparent;
+    color:cyan;
+    cursor:pointer;
+    font-size:18px;
+}
+.quickQuestions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    padding:9px 10px;
+    border-bottom:1px solid rgba(0,255,255,.2);
+}
+.quickQuestions button{
+    border:1px solid rgba(0,255,255,.5);
+    border-radius:15px;
+    background:#020606;
+    color:#8fffff;
+    padding:5px 9px;
+    font-size:11px;
+    cursor:pointer;
+}
+.quickQuestions button:hover{
+    background:cyan;
+    color:#000;
+}
+.chatMessages{
+    height:235px;
+    overflow-y:auto;
+    padding:12px;
+    font-size:13px;
+    text-align:left;
+    scrollbar-width:thin;
+    scrollbar-color:cyan #000;
+}
+.chatMessages div{
+    margin:8px 0;
+    padding:8px 10px;
+    border-radius:10px;
+    line-height:1.45;
+}
+.botMsg{
+    background:rgba(0,255,255,.07);
+    border-left:2px solid cyan;
+}
+.userMsg{
+    background:rgba(255,255,255,.06);
+    border-right:2px solid #fff;
+    text-align:right;
+    color:#fff;
+}
+.typing{
+    color:#7fffff;
+    font-style:italic;
+}
+.chatInputRow{
+    display:flex;
+    border-top:1px solid cyan;
+}
+.chatInput{
+    flex:1;
+    width:auto;
+    border:none;
+    outline:none;
+    padding:12px;
+    background:#050505;
+    color:white;
+}
+.sendBtn{
+    width:48px;
+    border:none;
+    border-left:1px solid rgba(0,255,255,.4);
+    background:cyan;
+    color:#000;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:bold;
+}
+.sendBtn:hover{background:#fff}
+
+/* FOOTER */
+footer{
+    color:#5fdada;
+    font-size:12px;
+    padding:10px 20px 30px;
+}
+
+/* ANIMATIONS */
+@keyframes pulse{
+    from{box-shadow:0 0 15px cyan}
+    to{box-shadow:0 0 35px cyan,0 0 65px rgba(0,255,255,.25)}
+}
+@keyframes sectionIn{
+    from{opacity:0;transform:translateY(15px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+@media(max-width:650px){
+    .circle{height:500px}
+    .card{width:105px;height:92px;font-size:12px}
+    .card .icon{font-size:22px}
+    .core{width:90px;height:90px;font-size:12px}
+    .skill-grid{grid-template-columns:1fr}
+    .section{font-size:15px;padding:25px 8px}
+    .section h2{font-size:27px}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="logo">VP</div>
+<div class="name">VARUN PATTNAYAK</div>
+<div class="tagline">B.Tech Computer Science &amp; Engineering Student</div>
+
+<!-- HOME / ORBITING NAVIGATION -->
+<div class="circle" id="orbit">
+    <div class="orbit-ring"></div>
+    <div class="orbit-ring two"></div>
+    <div class="core">EXPLORE<br>PORTFOLIO</div>
+
+    <div class="card" onclick="openPage('project')" id="card1"><div class="icon">🚀</div>Projects</div>
+    <div class="card" onclick="openPage('about')" id="card2"><div class="icon">👨‍💻</div>About</div>
+    <div class="card" onclick="openPage('education')" id="card3"><div class="icon">🎓</div>Education</div>
+    <div class="card" onclick="openPage('contact')" id="card4"><div class="icon">📩</div>Contact</div>
+
+    <div class="card" onclick="openPage('skills')" id="card5"><div class="icon">💻</div>Skills</div>
+    <div class="card" onclick="openPage('certificates')" id="card6"><div class="icon">📜</div>Certificates</div>
+    <div class="card" onclick="openPage('experience')" id="card7"><div class="icon">💼</div>Experience</div>
+    <div class="card" onclick="openPage('webinars')" id="card8"><div class="icon">🎤</div>Webinars</div>
+</div>
+
+<div class="hint">Click any orbiting section to explore</div>
+
+<!-- ABOUT -->
+<div id="about" class="section">
+    <h2>About Me</h2>
+    <div class="panel">
+        <p>
+            I am <strong>Varun Pattnayak</strong> from Koraput, Odisha, India, currently pursuing
+            a <strong>B.Tech in Computer Science &amp; Engineering</strong> at NIST University, Berhampur, Odisha.
+        </p>
+        <p>
+            I am interested in programming and enjoy creating projects while continuously learning
+            and exploring new technologies.
+        </p>
+    </div>
+
+    <div class="panel">
+        <h3>My Interests</h3>
+        <div class="tags">
+            <span class="tag">Cybersecurity</span>
+            <span class="tag">Game Development</span>
+            <span class="tag">AI / ML</span>
+            <span class="tag">IoT</span>
+            <span class="tag">Web Development</span>
+            <span class="tag">Emerging Technologies</span>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h3>What I Enjoy</h3>
+        <ul>
+            <li>Learning new technologies and concepts.</li>
+            <li>Building practical programming projects.</li>
+            <li>Exploring cybersecurity and game development.</li>
+            <li>Taking part in technical learning and research-oriented activities.</li>
+        </ul>
+    </div>
+    <div class="back-wrap"><div class="back" onclick="back()">← Back</div></div>
+</div>
+
+<!-- SKILLS -->
+<div id="skills" class="section">
+    <h2>Skills</h2>
+
+    <div class="skill-grid">
+        <div class="skill-card">
+            <h3>💻 Programming</h3>
+            <div class="level">Overall: Intermediate</div>
+            <div class="bar"><span style="width:65%"></span></div>
+            <p class="muted">Python · C · Java</p>
+        </div>
+
+        <div class="skill-card">
+            <h3>🌐 Web Development</h3>
+            <div class="level">Overall: Intermediate</div>
+            <div class="bar"><span style="width:65%"></span></div>
+            <p class="muted">HTML · CSS · JavaScript · React</p>
+        </div>
+
+        <div class="skill-card">
+            <h3>🗄️ Database</h3>
+            <div class="level">Overall: Good</div>
+            <div class="bar"><span style="width:78%"></span></div>
+            <p class="muted">MySQL · SQL</p>
+        </div>
+
+        <div class="skill-card">
+            <h3>☁️ Cloud &amp; Systems</h3>
+            <div class="level">Overall: Good</div>
+            <div class="bar"><span style="width:78%"></span></div>
+            <p class="muted">AWS · Linux / Ubuntu</p>
+        </div>
+
+        <div class="skill-card">
+            <h3>🛠️ Tools</h3>
+            <div class="level">Overall: Good</div>
+            <div class="bar"><span style="width:78%"></span></div>
+            <p class="muted">Git · GitHub · VS Code</p>
+        </div>
+
+        <div class="skill-card">
+            <h3>🔌 Hardware / IoT</h3>
+            <div class="level">Overall: Advanced</div>
+            <div class="bar"><span style="width:90%"></span></div>
+            <p class="muted">Arduino · IoT</p>
+        </div>
+    </div>
+
+    <div class="panel center">
+        <h3>Areas I'm Exploring</h3>
+        <div class="tags" style="justify-content:center">
+            <span class="tag">AI / ML</span>
+            <span class="tag">Cybersecurity</span>
+            <span class="tag">Game Development</span>
+            <span class="tag">IoT</span>
+        </div>
+    </div>
+    <div class="back-wrap"><div class="back" onclick="back()">← Back</div></div>
+</div>
+
+<!-- EDUCATION -->
+<div id="education" class="section">
+    <h2>Education</h2>
+
+    <div class="item">
+        <strong>B.Tech — Computer Science &amp; Engineering</strong><br>
+        NIST University, Berhampur, Odisha<br>
+        Expected Graduation: 2028
+    </div>
+
+    <div class="item">
+        <strong>Intermediate</strong><br>
+        V.S Vidyalaya, Sunabeda, Koraput, Odisha
+    </div>
+
+    <div class="item">
+        <strong>Schooling</strong><br>
+        V.S Vidyalaya, Sunabeda, Koraput, Odisha
+    </div>
+
+    <div class="back-wrap"><div class="back" onclick="back()">← Back</div></div>
+</div>
+
+<!-- PROJECT -->
+<div id="project" class="section">
+    <h2>Projects</h2>
+
+    <div class="panel">
+        <div class="project-title">🚀 Space Notepad 1.0</div>
+        <p>
+            A web-based digital notepad designed with a futuristic space-themed interface.
+            It provides regular note-taking functionality with a neon space-inspired presentation.
+        </p>
+
+        <h3>Features</h3>
+        <ul>
+            <li>Write notes</li>
+            <li>Save notes</li>
+            <li>Edit notes</li>
+            <li>Delete notes</li>
+            <li>Search notes</li>
+        </ul>
+
+        <p class="project-meta"><strong>Technologies:</strong> HTML · CSS · JavaScript</p>
+
+        <div class="project-actions">
+            <a class="btn" href="https://varunpattnayakcse2024-wq.github.io/varun-portfolio/" target="_blank">🌐 Live Demo</a>
+            <a class="btn" href="https://github.com/varunpattnayakcse2024-wq" target="_blank">🐙 GitHub</a>
+        </div>
+    </div>
+
+    <div class="back-wrap"><div class="back" onclick="back()">← Back</div></div>
+</div>
+
+<!-- CERTIFICATES -->
+<div id="certificates" class="section">
+    <h2>Certificates</h2>
+
+    <div class="item">
+        <strong>AWS Academy Graduate – Machine Learning Foundations – Training Badge</strong><br>
+        <span class="muted">AWS Academy · June 2026</span>
+    </div>
+
+    <div class="item">
+        <strong>Artificial Intelligence Primer Certification</strong><br>
+        <span class="muted">Infosys · April</span>
+    </div>
+
+    <div class="back-wrap"><div class="back" onclick="back()">← Back</div></div>
+</div>
+
+<!-- EXPERIENCE -->
+<div id="experience" class="section">
+    <h2>Experience</h2>
+
+    <div class="item">
+        <strong>Cloud Computing &amp; Machine Learning Internship</strong><br>
+        <span class="muted">2026</span>
+        <p>Practical learning and project experience in cloud computing and machine learning.</p>
+    </div>
+
+    <div class="item">
+        <strong>C++ Internship</strong><br>
+        <span class="muted">2026</span>
+        <p>Practical programming experience focused on C++ concepts and development.</p>
+    </div>
+
+    <div class="back-wrap"><div class="back" onclick="back()">← Back</div></div>
+</div>
+
+<!-- WEBINARS -->
+<div id="webinars" class="section">
+    <h2>Webinars &amp; Workshops</h2>
+
+    <div class="item">
+        <strong>IEEE India Council SAC Presents – WISE Episode 6</strong><br>
+        <span class="muted">Writing Skills for a Quality Research Paper</span>
+        <p>
+            Participated in an IEEE webinar focused on developing writing skills for producing
+            quality research papers.
+        </p>
+    </div>
+
+    <div class="back-wrap"><div class="back" onclick="back()">← Back</div></div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="section">
+    <h2>Contact</h2>
+
+    <div class="panel center">
+        <p>Interested in connecting or discussing technology and projects?</p>
+        <div class="contact-links">
+            <a class="contact-link" href="mailto:varunpattnayak2006@gmail.com">📧 varunpattnayak2006@gmail.com</a>
+            <a class="contact-link" href="https://www.linkedin.com/in/varun-pattnayak-71ab423a5" target="_blank">💼 LinkedIn</a>
+            <a class="contact-link" href="https://github.com/varunpattnayakcse2024-wq" target="_blank">🐙 GitHub</a>
+        </div>
+    </div>
+
+    <div class="back-wrap"><div class="back" onclick="back()">← Back</div></div>
+</div>
+
+<!-- SMART PORTFOLIO ASSISTANT -->
+<div class="chatBtn" onclick="toggleChat()">🤖 Ask Varun</div>
+
+<div class="chatBox" id="chatBox">
+    <div class="chatHeader">
+        <div>
+            <strong>VARUN AI</strong>
+            <span>Portfolio Assistant</span>
+        </div>
+        <button onclick="toggleChat()" aria-label="Close chatbot">×</button>
+    </div>
+
+    <div class="quickQuestions">
+        <button onclick="quickAsk('Tell me about Varun')">About</button>
+        <button onclick="quickAsk('What are his skills?')">Skills</button>
+        <button onclick="quickAsk('Tell me about Space Notepad')">Project</button>
+        <button onclick="quickAsk('How can I contact Varun?')">Contact</button>
+    </div>
+
+    <div class="chatMessages" id="chatMessages">
+        <div class="botMsg">
+            <strong>VARUN AI:</strong>
+            Hi! 👋 I'm Varun's portfolio assistant. Ask me about his skills,
+            education, project, certificates, experience, webinar, or contact details.
+        </div>
+    </div>
+
+    <div class="chatInputRow">
+        <input class="chatInput" id="chatInput"
+               placeholder="Ask about Varun..."
+               autocomplete="off">
+        <button class="sendBtn" onclick="sendChat()">➤</button>
+    </div>
+</div>
+
+<footer>© 2026 Varun Pattnayak · Built with HTML, CSS &amp; JavaScript</footer>
+
+<script>
+/* OPEN PAGE */
+function openPage(id){
+    document.getElementById("orbit").style.display="none";
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+    const page=document.getElementById(id);
+    if(page) page.classList.add("active");
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* BACK */
+function back(){
+    document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+    document.getElementById("orbit").style.display="block";
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ORBITING CARDS */
+const cards=[
+    document.getElementById("card1"),
+    document.getElementById("card2"),
+    document.getElementById("card3"),
+    document.getElementById("card4"),
+    document.getElementById("card5"),
+    document.getElementById("card6"),
+    document.getElementById("card7"),
+    document.getElementById("card8")
+];
+
+let angle=0;
+
+function rotateCards(){
+    const isMobile=window.innerWidth<=650;
+    const radius=isMobile ? Math.min(window.innerWidth*0.29,145) : 225;
+    const centerX=(document.querySelector(".circle").clientWidth/2)-66;
+    const centerY=(document.querySelector(".circle").clientHeight/2)-59;
+
+    cards.forEach((card,i)=>{
+        const a=angle+(i*Math.PI*2/cards.length);
+        const x=centerX+radius*Math.cos(a);
+        const y=centerY+radius*Math.sin(a);
+        card.style.left=x+"px";
+        card.style.top=y+"px";
+    });
+
+    angle+=0.0018;
+    requestAnimationFrame(rotateCards);
+}
+rotateCards();
+
+/* STAR BACKGROUND */
+const canvas=document.getElementById("stars");
+const ctx=canvas.getContext("2d");
+let stars=[];
+let shootingStars=[];
+
+function resizeCanvas(){
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+    createStars();
+}
+function createStars(){
+    stars=[];
+    for(let i=0;i<320;i++){
+        stars.push({
+            x:Math.random()*canvas.width,
+            y:Math.random()*canvas.height,
+            size:Math.random()*2,
+            speed:Math.random()*0.5+0.05
+        });
+    }
+}
+resizeCanvas();
+window.addEventListener("resize",resizeCanvas);
+
+function animateStars(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="white";
+
+    stars.forEach(s=>{
+        s.y+=s.speed;
+        if(s.y>canvas.height){
+            s.y=0;
+            s.x=Math.random()*canvas.width;
+        }
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.size,0,Math.PI*2);
+        ctx.fill();
+    });
+
+    shootingStars.forEach((s,index)=>{
+        ctx.beginPath();
+        ctx.moveTo(s.x,s.y);
+        ctx.lineTo(s.x-s.length,s.y-s.length);
+        ctx.strokeStyle="rgba(255,255,255,"+s.opacity+")";
+        ctx.lineWidth=2;
+        ctx.stroke();
+
+        s.x+=s.speed;
+        s.y+=s.speed;
+        s.opacity-=0.018;
+
+        if(s.opacity<=0 || s.y>canvas.height+100){
+            shootingStars.splice(index,1);
+        }
+    });
+
+    requestAnimationFrame(animateStars);
+}
+animateStars();
+
+function shootingStar(){
+    shootingStars.push({
+        x:Math.random()*canvas.width*.75,
+        y:Math.random()*canvas.height*.35,
+        length:80,
+        speed:8,
+        opacity:1
+    });
+}
+setInterval(shootingStar,4000);
+
+/* SMART PORTFOLIO ASSISTANT */
+const input = document.getElementById("chatInput");
+const chat = document.getElementById("chatMessages");
+
+function toggleChat(){
+    const box=document.getElementById("chatBox");
+    box.style.display=box.style.display==="block" ? "none" : "block";
+    if(box.style.display==="block") input.focus();
+}
+
+function quickAsk(question){
+    input.value=question;
+    sendChat();
+}
+
+function addMessage(type,text){
+    const div=document.createElement("div");
+    div.className=type==="user" ? "userMsg" : "botMsg";
+    div.innerHTML="<strong>"+(type==="user" ? "YOU" : "VARUN AI")+":</strong> "+escapeHTML(text);
+    chat.appendChild(div);
+    chat.scrollTop=chat.scrollHeight;
+}
+
+function addTyping(){
+    const div=document.createElement("div");
+    div.id="typing";
+    div.className="typing";
+    div.innerHTML="<strong>VARUN AI:</strong> Thinking<span class=\"dots\">...</span>";
+    chat.appendChild(div);
+    chat.scrollTop=chat.scrollHeight;
+}
+
+function removeTyping(){
+    const typing=document.getElementById("typing");
+    if(typing) typing.remove();
+}
+
+function sendChat(){
+    const raw=input.value.trim();
+    if(!raw) return;
+
+    addMessage("user",raw);
+    input.value="";
+    addTyping();
+
+    setTimeout(()=>{
+        removeTyping();
+        const result=getBotResponse(raw.toLowerCase());
+
+        if(result.action){
+            openPage(result.action);
+        }
+        addMessage("bot",result.text);
+    },350);
+}
+
+function getBotResponse(msg){
+
+    /* NAVIGATION COMMANDS */
+    if(msg.includes("open skills") || msg==="skills" || msg.includes("show skills")){
+        return {action:"skills",text:"Opening Varun's Skills section."};
+    }
+    if(msg.includes("open project") || msg.includes("open projects")){
+        return {action:"project",text:"Opening the Space Notepad 1.0 project."};
+    }
+    if(msg.includes("open education")){
+        return {action:"education",text:"Opening Education."};
+    }
+    if(msg.includes("open certificate") || msg.includes("open certificates")){
+        return {action:"certificates",text:"Opening Certificates."};
+    }
+    if(msg.includes("open experience") || msg.includes("open internship")){
+        return {action:"experience",text:"Opening Experience."};
+    }
+    if(msg.includes("open webinar") || msg.includes("open webinars")){
+        return {action:"webinars",text:"Opening Webinars & Workshops."};
+    }
+    if(msg.includes("open contact")){
+        return {action:"contact",text:"Opening Contact."};
+    }
+    if(msg.includes("open about")){
+        return {action:"about",text:"Opening About Me."};
+    }
+
+    /* GENERAL INFORMATION */
+    if(msg.includes("hello") || msg.includes("hi") || msg.includes("hey")){
+        return {text:"Hello! 👋 I'm Varun AI. I can tell you about Varun, his skills, education, project, certificates, experience, webinar and contact details."};
+    }
+
+    if(msg.includes("who is varun") || msg.includes("who is he") ||
+       msg.includes("tell me about varun") || msg.includes("about varun") ||
+       msg.includes("about him") || msg.includes("about")){
+        return {text:"Varun Pattnayak is a 3rd Year B.Tech Computer Science & Engineering student at NIST University, Berhampur, Odisha. He is interested in programming, cybersecurity, game development, AI/ML, IoT and learning new technologies."};
+    }
+
+    if(msg.includes("skill") || msg.includes("technology") || msg.includes("technologies")){
+        return {text:"Varun's programming skills include Python, C and Java. His web technologies include HTML, CSS, JavaScript and React. He also works with MySQL/SQL, AWS, Linux/Ubuntu, Git, GitHub, VS Code, Arduino and IoT. Overall levels are Intermediate in Programming and Web Development, Good in Database, Cloud & Systems and Tools, and Advanced in Hardware/IoT."};
+    }
+
+    if(msg.includes("programming language") || msg.includes("coding language")){
+        return {text:"Varun works with Python, C and Java."};
+    }
+
+    if(msg.includes("web development") || msg.includes("web skill")){
+        return {text:"Varun has Intermediate-level overall experience in Web Development, using HTML, CSS, JavaScript and React."};
+    }
+
+    if(msg.includes("cyber") || msg.includes("security")){
+        return {text:"Cybersecurity is one of Varun's main areas of interest."};
+    }
+
+    if(msg.includes("game")){
+        return {text:"Game Development is one of Varun's main interests."};
+    }
+
+    if(msg.includes("ai") || msg.includes("machine learning") || msg.includes("ml")){
+        return {text:"AI/ML is one of Varun's areas of interest and learning."};
+    }
+
+    if(msg.includes("iot")){
+        return {text:"IoT is one of Varun's areas of interest. His Hardware/IoT skills are listed as Advanced overall."};
+    }
+
+    /* PROJECT */
+    if(msg.includes("project") || msg.includes("space notepad") ||
+       msg.includes("notepad")){
+        return {text:"Space Notepad 1.0 is Varun's web-based digital notepad. It supports writing, saving, editing, deleting and searching notes. It is built using HTML, CSS and JavaScript. A live demo is available through his GitHub Pages project."};
+    }
+
+    if(msg.includes("github") && msg.includes("project")){
+        return {text:"Varun's GitHub profile is github.com/varunpattnayakcse2024-wq, where the Space Notepad project is available."};
+    }
+
+    /* EDUCATION */
+    if(msg.includes("education") || msg.includes("college") ||
+       msg.includes("university") || msg.includes("degree")){
+        return {text:"Varun is pursuing a B.Tech in Computer Science & Engineering at NIST University, Berhampur, Odisha. His expected graduation year is 2028. He completed Intermediate and schooling at V.S Vidyalaya, Sunabeda, Koraput, Odisha."};
+    }
+
+    if(msg.includes("graduat") || msg.includes("year")){
+        return {text:"Varun is currently a 3rd Year B.Tech CSE student and is expected to graduate in 2028."};
+    }
+
+    /* CERTIFICATES */
+    if(msg.includes("certificate") || msg.includes("certification")){
+        return {text:"The portfolio displays two certificates: AWS Academy Graduate – Machine Learning Foundations – Training Badge (AWS Academy, June 2026) and Artificial Intelligence Primer Certification (Infosys, April)."};
+    }
+
+    if(msg.includes("aws")){
+        return {text:"Varun's displayed AWS credential is the AWS Academy Graduate – Machine Learning Foundations – Training Badge, earned in June 2026."};
+    }
+
+    if(msg.includes("infosys")){
+        return {text:"Varun's displayed Infosys credential is the Artificial Intelligence Primer Certification, earned in April."};
+    }
+
+    /* EXPERIENCE */
+    if(msg.includes("experience") || msg.includes("internship") ||
+       msg.includes("intern")){
+        return {text:"Varun's portfolio includes Cloud Computing & Machine Learning Internship experience and C++ Internship experience in 2026."};
+    }
+
+    /* WEBINAR */
+    if(msg.includes("webinar") || msg.includes("ieee") ||
+       msg.includes("wise")){
+        return {text:"Varun participated in IEEE India Council SAC's WISE Episode 6: 'Writing Skills for a Quality Research Paper'."};
+    }
+
+    /* CONTACT */
+    if(msg.includes("contact") || msg.includes("email") ||
+       msg.includes("mail")){
+        return {text:"You can contact Varun at varunpattnayak2006@gmail.com. His LinkedIn is linkedin.com/in/varun-pattnayak-71ab423a5 and his GitHub is github.com/varunpattnayakcse2024-wq."};
+    }
+
+    if(msg.includes("linkedin")){
+        return {text:"Varun's LinkedIn: linkedin.com/in/varun-pattnayak-71ab423a5"};
+    }
+
+    if(msg.includes("location") || msg.includes("where is varun") ||
+       msg.includes("from where")){
+        return {text:"Varun is from Koraput, Odisha, India, and is currently studying at NIST University, Berhampur, Odisha."};
+    }
+
+    if(msg.includes("help") || msg.includes("what can you do")){
+        return {text:"Try asking: 'Tell me about Varun', 'What are his skills?', 'Tell me about Space Notepad', 'What certificates does he have?', 'Where does he study?', 'Tell me about his internship', 'What webinar did he attend?', or 'How can I contact him?' You can also say 'open skills' or 'open project'."};
+    }
+
+    return {text:"I don't have that information yet. Try asking about Varun, skills, Space Notepad, education, certificates, experience, IEEE webinar, interests or contact. You can also ask me to open a portfolio section."};
+}
+
+function escapeHTML(text){
+    const div=document.createElement("div");
+    div.textContent=text;
+    return div.innerHTML;
+}
+
+input.addEventListener("keypress",function(e){
+    if(e.key==="Enter") sendChat();
+});
+
+</script>
+
+</body>
+</html>
